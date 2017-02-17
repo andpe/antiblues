@@ -11,13 +11,16 @@ namespace AntiBlues.Helpers
     {
         private WindowsMicrophoneMuteLibrary.WindowsMicMute mMicrophoneMuter;
         private Timer mTimer;
-        public MicrophoneHandling()
+        private int mCooldown;
+
+        public MicrophoneHandling(int cooldown)
         {
             mMicrophoneMuter = new WindowsMicrophoneMuteLibrary.WindowsMicMute();
+            mCooldown = cooldown;
 
             // TODO: Make this configurable
             mTimer = new Timer();
-            mTimer.Interval = 5000;
+            mTimer.Interval = mCooldown;
             mTimer.Elapsed += UnmuteMic;
             mTimer.AutoReset = false;
         }
@@ -28,7 +31,7 @@ namespace AntiBlues.Helpers
 
             // Reset the timer if we trigger it again while it's still ongoing.
             mTimer.Stop();
-            mTimer.Interval = 5000;
+            mTimer.Interval = mCooldown;
             mTimer.Start();
         }
 

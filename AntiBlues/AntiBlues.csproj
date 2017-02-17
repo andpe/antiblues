@@ -52,6 +52,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Config.cs" />
     <Compile Include="Helpers\MicrophoneHandling.cs" />
     <Compile Include="Helpers\RateCalculator.cs" />
     <Compile Include="KeyboardListener.cs" />

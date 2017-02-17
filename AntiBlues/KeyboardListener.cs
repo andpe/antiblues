@@ -6,8 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AntiBlues.Helpers;
-
-
+using System.IO;
 
 namespace AntiBlues
 {
@@ -26,13 +25,30 @@ namespace AntiBlues
         [STAThread]
         static void Main()
         {
-            // TODO: Make this possible to configure.
+            // Try 
+            Config c = null;
+            try {
+                c = new Config("appconfig.xml");
+            } catch(FileNotFoundException e) {
+                System.Xml.Linq.XDocument xdoc = new System.Xml.Linq.XDocument();
+                xdoc.Add(new System.Xml.Linq.XElement("configfile"));
+                xdoc.Save("appconfig.xml");
+
+                c = new Config("appconfig.xml", xdoc);
+                c.setConfig("ActicationPoint", (10).ToString());
+                c.setConfig("SamlePeriod", (2000).ToString());
+                c.setConfig("Cooldown", (5000).ToString());
+            }
+
+            int act_point = c.getConfig<int>("ActivationPoint", 10);
+            int sample_period = c.getConfig<int>("SamplePeriod", 2000);
+            int cooldown = c.getConfig<int>("Cooldown", 5000);
 
             // Set up a trigger on 10 keys pressed in less than two seconds
             // and set up a handler for reaching the activation point that
             // mutes the microphone.
-            mRateTrigger = new RateTrigger(10, 2);
-            MicrophoneHandling mic = new MicrophoneHandling();
+            mRateTrigger = new RateTrigger(act_point, sample_period);
+            MicrophoneHandling mic = new MicrophoneHandling(cooldown);
             mRateTrigger.ActivationPointReached += mic.TriggeredLimit;
 
             // Set up hooks and stuff for the application.

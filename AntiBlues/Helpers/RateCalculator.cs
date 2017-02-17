@@ -22,7 +22,7 @@ namespace AntiBlues.Helpers
         public int Hits
         {
             get {
-                return mHits.Count(x => (DateTime.Now - x).TotalSeconds < SamplePeriod);
+                return mHits.Count(x => (DateTime.Now - x).TotalMilliseconds < SamplePeriod);
             }
         }
 
@@ -49,7 +49,7 @@ namespace AntiBlues.Helpers
         {
             if(this.Hits > this.ActivationPoint)
             {
-                mHits.RemoveAll(x => (DateTime.Now - x).TotalSeconds > SamplePeriod);
+                mHits.RemoveAll(x => (DateTime.Now - x).TotalMilliseconds > SamplePeriod);
                 ActivationPointReached?.Invoke();
             }
         }
