@@ -38,8 +38,6 @@ namespace AntiBlues.Helpers
         {
             this.mConfig = XDocument.Load(mConfigPath);
             T res = default_value;
-
-            Type t = typeof(T);
             XElement conf = mRoot.Element(name);
 
             string val = conf?.Value;
@@ -56,6 +54,9 @@ namespace AntiBlues.Helpers
         /// <param name="value">String value of the element</param>
         public void setConfig(string name, string value)
         {
+            // If the key can't be found, create it and then set its value.
+            // Otherwise, just set its value and save the config data to the
+            // XML.
             XElement e = this.mConfig.Element(name);
             if (e == null) {
                 e = new XElement(name);

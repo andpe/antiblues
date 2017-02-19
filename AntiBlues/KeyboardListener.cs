@@ -25,7 +25,8 @@ namespace AntiBlues
         [STAThread]
         static void Main()
         {
-            // Try 
+            // Try to load the config, if it doesn't exist then simply create a default
+            // config and add some standard keys to it.
             Config c = null;
             try {
                 c = new Config("appconfig.xml");
@@ -40,11 +41,12 @@ namespace AntiBlues
                 c.setConfig("Cooldown", (5000).ToString());
             }
 
+            // Load the values from the config file.
             int act_point = c.getConfig<int>("ActivationPoint", 10);
             int sample_period = c.getConfig<int>("SamplePeriod", 2000);
             int cooldown = c.getConfig<int>("Cooldown", 5000);
 
-            // Set up a trigger on 10 keys pressed in less than two seconds
+            // Set up a trigger on N keys pressed in less than M seconds
             // and set up a handler for reaching the activation point that
             // mutes the microphone.
             mRateTrigger = new RateTrigger(act_point, sample_period);
